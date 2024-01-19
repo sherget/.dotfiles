@@ -33,17 +33,15 @@ import XMonad.Hooks.ServerMode
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
---import XMonad.Hooks.WindowSwallowing
+import XMonad.Hooks.WindowSwallowing
 import XMonad.Hooks.WorkspaceHistory
 
-    -- Layouts
-import XMonad.Layout.Accordion
-import XMonad.Layout.GridVariants (Grid(Grid))
-import XMonad.Layout.SimplestFloat
-import XMonad.Layout.Spiral
-import XMonad.Layout.ResizableTile
-import XMonad.Layout.Tabbed
+-- Layouts
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.SimplestFloat
+import XMonad.Layout.GridVariants (Grid(Grid))
+import XMonad.Layout.Spiral
+import XMonad.Layout.Fullscreen
 
     -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
@@ -54,7 +52,9 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.ShowWName
 import XMonad.Layout.Simplest
+import XMonad.Layout.Magnifier
 import XMonad.Layout.Spacing
+import XMonad.Layout.ResizableTile
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowArranger (windowArrange, WindowArrangerMsg(..))
 import XMonad.Layout.WindowNavigation
@@ -64,7 +64,7 @@ import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
    -- Utilities
 import XMonad.Util.Dmenu
 import XMonad.Util.EZConfig (additionalKeysP, mkNamedKeymap)
---import XMonad.Util.Hacks (windowedFullscreenFixEventHook, javaHack, trayerAboveXmobarEventHook, trayAbovePanelEventHook, trayerPaddingXmobarEventHook, trayPaddingXmobarEventHook, trayPaddingEventHook)
+import XMonad.Util.Hacks (windowedFullscreenFixEventHook, javaHack, trayerAboveXmobarEventHook, trayAbovePanelEventHook, trayerPaddingXmobarEventHook, trayPaddingXmobarEventHook, trayPaddingEventHook)
 import XMonad.Util.NamedActions
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
@@ -94,13 +94,47 @@ myModMask       = mod1Mask
 -- A tagging example:
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
---
-myWorkspaces    = ["www", "code", "misc", "docker"] ++ map show [4..9]
+
+-- Workspaces --
+xmobarEscape :: String -> String
+xmobarEscape = concatMap doubleLts
+  where
+        doubleLts '<' = "<<"
+        doubleLts x   = [x]
+
+myWorkspaces :: [String]
+myWorkspaces    = ["www", "code", "misc"] ++ map [4..9]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
 myNormalBorderColor  = "#ffffff"
 myFocusedBorderColor = "#ccff00"
+
+-- SCRATCHPADS
+scratchpads = [ NS "ranger" "st -c 'ranger' -e ranger" (className =? "ranger") manageTerm
+              ,  NS "notes" "st -c 'scratchpad' -e 'nvim'" (className =? "scratchpad") manageTerm
+              ,  NS "pavu" "pavucontrol" (className =? "Pavucontrol") manageWindow
+              ,  NS "tor" "exec gtk-launch start-tor-browser" (className =? "Tor Browser") manageTerm
+              ,  NS "bitwarden" "bitwarden-desktop" (className =? "Bitwarden") manageWindow
+              ,  NS "st" "st" (className =? "StScratchpad") manageWindow
+              ,  NS "networkmanager" "nm-connection-editor" (className =? "Nm-connection-editor") manageWindow
+              ,  NS "bluetooth" "blueman-manager" (className =? "Blueman-manager") manageWindow
+              ,  NS "trello" "npm start --prefix ~/Applications/trello/" (className =? "Trello") manageTerm
+              ]
+  where
+manageTerm = customFloating $ W.RationalRect l t w h
+           where
+             h = 0.9
+             w = 0.9
+             t = 0.95 -h
+             l = 0.95 -w
+
+manageWindow = customFloating $ W.RationalRect l t w h
+           where
+             h = 0.6
+             w = 0.6
+             t = 0.80 -h
+             l = 0.80 -w
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -210,6 +244,10 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
     ]
 
+-- Spacing
+mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing i = spacingRaw True (Border i i i i) True (Border i i i i) True
+
 ------------------------------------------------------------------------
 -- Layouts:
 
@@ -220,20 +258,30 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
---
-myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
-  where
-     -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
 
-     -- The default number of windows in the master pane
-     nmaster = 1
+-- Defining Layouts
+tall     = renamed [Replace "Tall"]
+           $ limitWindows 12
+           $ mySpacing 8
+           $ ResizableTall 1 (1/100) (1/2) []
 
-     -- Default proportion of screen occupied by master pane
-     ratio   = 1/2
+threeCol = renamed [Replace "Unflexed"]
+          $ mySpacing 3
+          $ ThreeColMid 1 (1/10) (1/2)
 
-     -- Percent of screen to increment by when resizing panes
-     delta   = 3/100
+monocle  = renamed [Replace "Monocle"]
+           $ limitWindows 20 Full
+
+myLayoutHook = avoidStruts
+              $ mouseResize
+              $ windowArrange
+              $ T.toggleLayouts monocle
+              $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
+             where
+               myDefaultLayout = threeCol
+                                ||| noBorders monocle
+                                ||| tall
+                                ||| threeCol
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -260,12 +308,6 @@ myManageHook = composeAll
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = False
 
-
-------------------------------------------------------------------------
--- Status bars and logging
-
-myLogHook = return ()
-
 ------------------------------------------------------------------------
 -- Startup scripts 
 --
@@ -279,11 +321,22 @@ myStartupHook = do
 ------------------------------------------------------------------------
 -- Run xmonad with the settings you specify. No need to modify this.
 
-main = do 
-  xmproc <- spawnPipe "xmobar -x 0 ~/.dotfiles/xmonad/xmobar.config"
-  xmonad $ docks defaults
+windowCount :: X (Maybe String)
+windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
-defaults = def {
+activeColor = "#00ccff"
+inactiveColor = "#ffffff"
+separatorColor = "#ffffff"
+urgentColor = "#ff0000"
+color05 = "#00ccff"
+color09 = "#00ccff"
+color16 = "#00ccff"
+
+main = do 
+  -- Launch xmobar
+  xmproc <- spawnPipe "xmobar -x 0 ~/.dotfiles/xmonad/xmobar.config"
+  -- Lauch XMonad
+  xmonad $ docks $ def {
       -- General stuff
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
@@ -298,8 +351,29 @@ defaults = def {
         mouseBindings      = myMouseBindings,
 
       -- Hooks
-        layoutHook         = myLayout,
-        manageHook         = myManageHook,
-        logHook            = myLogHook,
-        startupHook        = myStartupHook
+        layoutHook         = myLayoutHook,
+        manageHook         = manageDocks <+> namedScratchpadManageHook scratchpads <+> manageHook def,
+        startupHook        = myStartupHook,
+        logHook = dynamicLogWithPP $ xmobarPP
+                { ppOutput = hPutStrLn xmproc,
+                  ppCurrent = xmobarColor activeColor "" . wrap
+                              "[ " " ]",
+                  -- Visible but not current workspace
+                  ppVisible = xmobarColor inactiveColor "",
+                  -- Hidden workspace
+                  ppHidden = xmobarColor inactiveColor "" . wrap
+                              "[ " " ]",
+                  -- Hidden workspaces (no windows)
+                  ppHiddenNoWindows = xmobarColor inactiveColor "". wrap
+                              "[ " " ]",
+                  -- Title of active window
+                  ppTitle = (\str -> ""),
+                  -- Separator character
+                  ppSep =  "<fc=" ++ separatorColor ++ "> <fn=1>|</fn> </fc>",
+                  -- Urgent workspace
+                  ppUrgent = xmobarColor urgentColor "" . wrap "!" "!",
+                  -- Order of things in xmobar
+                  ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
+                }
+
     }
