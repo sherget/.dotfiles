@@ -2,7 +2,7 @@
 import XMonad
 import System.Directory
 import System.IO (hClose, hPutStr, hPutStrLn)
-import System.Exit (exitSuccess)
+import System.Exit (exitWith, ExitCode( ExitSuccess ))
 import qualified XMonad.StackSet as W
 
     -- Actions
@@ -108,7 +108,7 @@ myFocusedBorderColor = "#ccff00"
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
-    [ ((modm, 		    xK_Return), spawn $ XMonad.terminal conf)
+    [ ((modm,               xK_Return), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
     , ((modm,               xK_p     ), spawn "dmenu_run | dmenu -b")
@@ -273,8 +273,8 @@ myLogHook = return ()
 -- that get symlinked to /usr/bin/<script>
 
 myStartupHook = do
-	spawnOnce "set-wallpaper"
-	spawnOnce "compton &"
+    spawnOnce "set-wallpaper"
+    spawnOnce "compton &"
 
 ------------------------------------------------------------------------
 -- Run xmonad with the settings you specify. No need to modify this.
@@ -283,7 +283,7 @@ main = do
   xmproc <- spawnPipe "xmobar -x 0 ~/dotfiles/xmonad/xmobar.config"
   xmonad $ docks defaults
 
-defaults = defaultConfig {
+defaults = def {
       -- General stuff
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
