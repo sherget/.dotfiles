@@ -103,7 +103,7 @@ xmobarEscape = concatMap doubleLts
         doubleLts x   = [x]
 
 myWorkspaces :: [String]
-myWorkspaces    = ["www", "code", "misc"] ++ map [4..9]
+myWorkspaces    = ["www", "code", "misc"] ++ map show [4..5]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
