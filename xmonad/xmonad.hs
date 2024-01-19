@@ -269,7 +269,7 @@ myLogHook = return ()
 ------------------------------------------------------------------------
 -- Startup scripts 
 --
--- bash scripts located in ~/dotfiles/xmonad/<script> 
+-- bash scripts located in ~/.dotfiles/xmonad/<script> 
 -- that get symlinked to /usr/bin/<script>
 
 myStartupHook = do
@@ -280,7 +280,7 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 
 main = do 
-  xmproc <- spawnPipe "xmobar -x 0 ~/dotfiles/xmonad/xmobar.config"
+  xmproc <- spawnPipe "xmobar -x 0 ~/.dotfiles/xmonad/xmobar.config"
   xmonad $ docks defaults
 
 defaults = def {
