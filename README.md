@@ -25,3 +25,13 @@ sudo add-apt-repository ppa:aslatter/ppa -y
 sudo apt install alacritty
 ```
 
+# Terminal multiplexer
+```bash
+sudo apt install tmux
+```
+
+# ZSH
+```bash
+sudo apt install zsh
+```
+
