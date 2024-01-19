@@ -12,7 +12,7 @@ mkdir -p ~/.local/bin
 export PATH=~/.local/bin:$PATH
 stack init
 stack install
-sudo apt install fonts-jetbrains-mono fonts-ubuntu fonts-font-awesome fonts-mononoki
+sudo apt install fonts-jetbrains-mono fonts-ubuntu fonts-font-awesome fonts-mononoki fonts-noto fonts-hack-ttf
 
 sudo apt update
 sudo apt upgrade

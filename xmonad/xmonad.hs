@@ -322,7 +322,7 @@ myStartupHook = do
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
-activeColor = "#00ccff"
+activeColor = "#dd2222"
 inactiveColor = "#ffffff"
 separatorColor = "#ffffff"
 urgentColor = "#ff0000"
@@ -357,7 +357,7 @@ main = do
                   ppVisible = xmobarColor inactiveColor "",
                   -- Hidden workspace
                   ppHidden = xmobarColor inactiveColor "" . wrap
-                              ("[ <box type=Top width=2 mt=2 color=" ++ inactiveColor ++ ">") "</box> ]",
+                              ("[ <box type=Top width=1 mt=2 color=" ++ inactiveColor ++ ">") "</box> ]",
                   -- Hidden workspaces (no windows)
                   ppHiddenNoWindows = xmobarColor inactiveColor "". wrap
                               "[ " " ]",
