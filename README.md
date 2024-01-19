@@ -1,4 +1,4 @@
-# Xmonad windowmanager and basic tool
+# Xmonad windowmanager, fonts and basic tools
 We have to install xmonad manually because the ubuntu repos are outdated as usual.
 (See https://xmonad.org/INSTALL.html)
 Current xmonad version 0.17 is already 3 years old or older. No update in the repositories.
@@ -12,18 +12,16 @@ mkdir -p ~/.local/bin
 export PATH=~/.local/bin:$PATH
 stack init
 stack install
+sudo apt install fonts-jetbrains-mono fonts-ubuntu fonts-font-awesome fonts-mononoki
 
 sudo apt update
 sudo apt upgrade
 sudo apt install xmobar dmenu feh trayer
 ```
 
-# Compton composite manager for transparencies
-```bash
-sudo apt install compton 
-```
-
 # Terminalemulator
 ```bash
+sudo add-apt-repository ppa:aslatter/ppa -y
+sudo apt install alacritty
 ```
 
