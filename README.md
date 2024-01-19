@@ -19,6 +19,11 @@ sudo apt upgrade
 sudo apt install xmobar dmenu feh trayer
 ```
 
+# Composition (transparency)
+```bash
+sudo apt install compton
+```
+
 # Terminalemulator
 ```bash
 sudo add-apt-repository ppa:aslatter/ppa -y
@@ -30,8 +35,9 @@ sudo apt install alacritty
 sudo apt install tmux
 ```
 
-# ZSH
+# ZSH + oh-my-zsh
 ```bash
 sudo apt install zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 

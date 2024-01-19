@@ -142,7 +142,7 @@ history = 5000
 [window]
 title = "Alacritty"
 decorations = "None"
-opacity = 0.7
+opacity = 0.9
 
 [window.class]
 general = "Alacritty"

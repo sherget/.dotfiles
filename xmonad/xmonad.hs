@@ -313,7 +313,7 @@ myFocusFollowsMouse = False
 -- that get symlinked to /usr/bin/<script>
 
 myStartupHook = do
-    spawnOnce "set-wallpaper"
+    spawnOnce "~/.dotfiles/xmonad/set-wallpaper"
     spawnOnce "compton &"
 
 ------------------------------------------------------------------------
