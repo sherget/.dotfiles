@@ -328,9 +328,6 @@ activeColor = "#00ccff"
 inactiveColor = "#ffffff"
 separatorColor = "#ffffff"
 urgentColor = "#ff0000"
-color05 = "#00ccff"
-color09 = "#00ccff"
-color16 = "#00ccff"
 
 main = do 
   -- Launch xmobar
@@ -362,7 +359,7 @@ main = do
                   ppVisible = xmobarColor inactiveColor "",
                   -- Hidden workspace
                   ppHidden = xmobarColor inactiveColor "" . wrap
-                              "[ " " ]",
+                              ("[ <box type=Top width=2 mt=2 color=" ++ inactiveColor ++ ">") "</box> ]",
                   -- Hidden workspaces (no windows)
                   ppHiddenNoWindows = xmobarColor inactiveColor "". wrap
                               "[ " " ]",
