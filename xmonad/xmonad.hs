@@ -73,7 +73,7 @@ import XMonad.Util.SpawnOnce
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "gnome-terminal"
+myTerminal      = "alacritty"
 
 -- Width of the window border in pixels.
 --
@@ -107,7 +107,7 @@ myWorkspaces    = ["www", "code", "misc"] ++ map show [4..5]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "#ffffff"
+myNormalBorderColor  = "#666666"
 myFocusedBorderColor = "#00ccff"
 
 -- SCRATCHPADS
@@ -273,6 +273,7 @@ myLayoutHook = avoidStruts
               $ mouseResize
               $ windowArrange
               $ T.toggleLayouts monocle
+              $ smartBorders
               $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
              where
                myDefaultLayout = threeCol
