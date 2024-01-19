@@ -108,18 +108,15 @@ myWorkspaces    = ["www", "code", "misc"] ++ map show [4..5]
 -- Border colors for unfocused and focused windows, respectively.
 --
 myNormalBorderColor  = "#ffffff"
-myFocusedBorderColor = "#ccff00"
+myFocusedBorderColor = "#00ccff"
 
 -- SCRATCHPADS
-scratchpads = [ NS "ranger" "st -c 'ranger' -e ranger" (className =? "ranger") manageTerm
-              ,  NS "notes" "st -c 'scratchpad' -e 'nvim'" (className =? "scratchpad") manageTerm
+scratchpads = [ NS "notes" "st -c 'scratchpad' -e 'nvim'" (className =? "scratchpad") manageTerm
               ,  NS "pavu" "pavucontrol" (className =? "Pavucontrol") manageWindow
               ,  NS "tor" "exec gtk-launch start-tor-browser" (className =? "Tor Browser") manageTerm
               ,  NS "bitwarden" "bitwarden-desktop" (className =? "Bitwarden") manageWindow
-              ,  NS "st" "st" (className =? "StScratchpad") manageWindow
               ,  NS "networkmanager" "nm-connection-editor" (className =? "Nm-connection-editor") manageWindow
               ,  NS "bluetooth" "blueman-manager" (className =? "Blueman-manager") manageWindow
-              ,  NS "trello" "npm start --prefix ~/Applications/trello/" (className =? "Trello") manageTerm
               ]
   where
 manageTerm = customFloating $ W.RationalRect l t w h
