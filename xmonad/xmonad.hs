@@ -107,7 +107,7 @@ myWorkspaces    = ["www", "code", "misc"] ++ map show [4..5]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "#666666"
+myNormalBorderColor  = "#444444"
 myFocusedBorderColor = "#00ccff"
 
 -- SCRATCHPADS
