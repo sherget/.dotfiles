@@ -18,13 +18,8 @@ export FZF_TMUX=1
 #export FZF_TMUX_OPTS="-p 80%,60%"
 export FZF_TMUX_OPTS="-d"
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-[ -f $ZSH/oh-my-zsh.sh ] && source $ZSH/oh-my-zsh.sh
-
 # Plugins
-plugins=(git ripgrep fzf fzf-tab)
+plugins=(git ripgrep fzf)
 
 # Preferred editor for local and remote sessions
  if [[ -n $SSH_CONNECTION ]]; then
@@ -32,6 +27,10 @@ plugins=(git ripgrep fzf fzf-tab)
  else
    export EDITOR='nvim'
  fi
+
+[ -f $ZSH/oh-my-zsh.sh ] && source $ZSH/oh-my-zsh.sh
+[ -f $HOME/.dotfiles/zsh/zprofile ] && source $HOME/.dotfiles/zsh/zprofile
+[ -f $HOME/.zshenv-local ] && source $HOME/.zshenv-local
 
 # Setup fzf
 # ---------
@@ -46,6 +45,3 @@ source "/home/kwogga/.fzf/shell/completion.zsh"
 # Key bindings
 # ------------
 source "/home/kwogga/.fzf/shell/key-bindings.zsh"
-
-[ -f $HOME/.dotfiles/zsh/zprofile ] && source $HOME/.dotfiles/zsh/zprofile
-[ -f $HOME/.zshenv-local ] && source $HOME/.zshenv-local
