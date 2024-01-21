@@ -1,0 +1,6 @@
+{
+  "lazy.nvim": { "branch": "main", "commit": "28126922c9b54e35a192ac415788f202c3944c9f" },
+  "lualine.nvim": { "branch": "master", "commit": "566b7036f717f3d676362742630518a47f132fff" },
+  "nvim-web-devicons": { "branch": "master", "commit": "140edfcf25093e8b321d13e154cbce89ee868ca0" },
+  "solarized-osaka.nvim": { "branch": "main", "commit": "e436a77eb643fe42d52b229c5cdf2e72dda88ed4" }
+}

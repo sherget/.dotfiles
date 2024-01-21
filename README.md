@@ -30,14 +30,18 @@ sudo add-apt-repository ppa:aslatter/ppa -y
 sudo apt install alacritty
 ```
 
-# Terminal multiplexer
+# Terminal multiplexer + tmux package managers
 ```bash
 sudo apt install tmux
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
-# ZSH + oh-my-zsh
+# ZSH + oh-my-zsh + relevant tools
 ```bash
 sudo apt install zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sudo apt install fd-find ripgrep bat tree
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
 ```
 

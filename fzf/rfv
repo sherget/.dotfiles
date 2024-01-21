@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+fdfind --type file --strip-cwd-prefix --hidden --follow --exclude .git |
+	fzf --prompt 'Files> ' \
+	--height=40% --layout=reverse-list --info=inline --margin=1 --padding=1 \
+	--header 'CTRL-T: Switch between Files/Directories' \
+	--bind 'ctrl-t:transform:[[ ! {fzf:prompt} =~ Files ]] &&
+	echo "change-prompt(Files> )+reload(fdfind --type file --strip-cwd-prefix --hidden --follow --exclude .git)" ||
+	echo "change-prompt(Directories> )+reload(fdfind --type directory --strip-cwd-prefix --hidden --follow --exclude .git)"' \
+	--preview '[[ {fzf:prompt} =~ Files ]] && batcat --color=always {} || tree -C {}' \
+	--bind 'enter:become(nvim {1})+abort'
+
+

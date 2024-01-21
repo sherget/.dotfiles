@@ -1,45 +1,30 @@
-# Default path
-export PATH=~/.local/bin:$PATH
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-# Paths for xmonad and tools.
-export PATH=~/.local/bin:$PATH
-
-# Theme
+# General
 ZSH_THEME="robbyrussell"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
 HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-zstyle ':omz:update' frequency 30
-
-# Disable marking untracked files
 DISABLE_UNTRACKED_FILES_DIRTY="true"
+zstyle ':omz:update' frequency 30 # Update frequency
+typeset -U path # Only allow unique entries in the PATH variable
+
+# Export
+export LANG=en_US.UTF-8
+export PATH=~/.local/bin:$PATH
+export ZSH="$HOME/.oh-my-zsh"
+export EDITOR="nvim"
+# Fuzzystuff (fzf)
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse-list --info=inline --margin=1 --padding=1"
+export FZF_DEFAULT_COMMAND='fdfind --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+export FZF_TMUX=1
+#export FZF_TMUX_OPTS="-p 80%,60%"
+export FZF_TMUX_OPTS="-d"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+[ -f $ZSH/oh-my-zsh.sh ] && source $ZSH/oh-my-zsh.sh
 
-source $ZSH/oh-my-zsh.sh
-# Set language
-export LANG=en_US.UTF-8
+# Plugins
+plugins=(git ripgrep fzf fzf-tab)
 
 # Preferred editor for local and remote sessions
  if [[ -n $SSH_CONNECTION ]]; then
@@ -47,3 +32,20 @@ export LANG=en_US.UTF-8
  else
    export EDITOR='nvim'
  fi
+
+# Setup fzf
+# ---------
+if [[ ! "$PATH" == */home/kwogga/.fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/kwogga/.fzf/bin"
+fi
+
+# Auto-completion
+# ---------------
+source "/home/kwogga/.fzf/shell/completion.zsh"
+
+# Key bindings
+# ------------
+source "/home/kwogga/.fzf/shell/key-bindings.zsh"
+
+[ -f $HOME/.dotfiles/zsh/zprofile ] && source $HOME/.dotfiles/zsh/zprofile
+[ -f $HOME/.zshenv-local ] && source $HOME/.zshenv-local
